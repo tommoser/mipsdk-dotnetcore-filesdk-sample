@@ -49,55 +49,6 @@ namespace mipsdk
                     }
                 }
             }
-
-        }
-
-        public bool SetLabel(string labelId)
-        {
-            LabelingOptions options = new LabelingOptions();
-            options.AssignmentMethod = AssignmentMethod.Standard;
-                                    
-            // First Attempt to label
-            try 
-            {
-                handler.SetLabel(engine.GetLabelById(labelId), options, new ProtectionSettings());
-            }
-
-            // Catch the adhoc proteciton required, generate protection descriptor, and try again.
-            catch (Microsoft.InformationProtection.Exceptions.AdhocProtectionRequiredException ex)
-            {                
-                // Generate a list of all users who should have the set of roles. 
-                List<string> userList = new List<string>()
-                {
-                    "alice@milt0r.com","bob@milt0r.com"
-                };
-
-                // Roles for the users
-                List<string> rolelist = new List<string>()
-                {
-                    "OWNER"
-                };
-                
-                List<UserRoles> userRolesList = new List<UserRoles>()
-                {
-                    new UserRoles(userList, rolelist)
-                };
-                
-                // Use userroles to generate descriptor. 
-                ProtectionDescriptor descriptor = new ProtectionDescriptor(userRolesList);                
-                // Set protection using descriptor
-                handler.SetProtection(descriptor, new ProtectionSettings());
-
-                //try to set label
-                handler.SetLabel(engine.GetLabelById(labelId), options, new ProtectionSettings());
-                return false;
-            }
-
-            catch (Microsoft.InformationProtection.Exceptions.JustificationRequiredException ex)
-            {
-                return false;
-            }
-        return true;
-        }
+        } 
     }
 }
